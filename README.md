@@ -6,7 +6,7 @@ Có thể thấy console log các trạng thái hiện tại của mạng
 3. chạy file client.py để có thể thêm vào 1 log mesage. Nhập một số nguyên
 
 #các testcase hiện tại
-1. khi mạng mất đi leader sẽ tự động tìm leader mới. Các shutdown một node hoặc resume một node
+1. khi mạng mất đi leader sẽ tự động tìm leader mới. Cách shutdown một node hoặc resume một node
 là click vào node đó trên giao diện
 2. khi 1 node start lại, nó sẽ thêm được các log trước đó bị bỏ lỡ
 3. khi một node mất kết nối, nó không thể thêm mới một entry
