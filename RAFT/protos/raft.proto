@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package raft;
+
+service RAFT{
+    rpc RequestVote(request_vote_message) returns(reply_vote_mesage);
+    rpc ReplicateLog(request_replicate_message) returns(reply_replicate_massage);
+    rpc AddEntry(request_entry) returns (reply_entry);
+}
+message request_vote_message{
+    int32 nodeId=1;
+    int32 currentTerm=2;
+    int32 logLength=3;
+    int32 lastTerm=4;
+    int32 requestType=5;
+}
+message reply_vote_mesage{
+    int32 nodeId =1;
+    int32 currentTerm=2;
+    bool isVote=3;
+    int32 replyType=4;
+}
+
+message request_replicate_message{
+    message log_message{
+        int32 term=1;
+        int32 mes=2;
+    }
+    int32 leaderId=1;
+    int32 currentTerm=2;
+    int32 prefixLength=3;
+    int32 prefixTerm=4;
+    int32 commitLength=5;
+    repeated log_message suffix=6;
+    int32 requestType=7;
+}
+message reply_replicate_massage{
+    int32 nodeId =1;
+    int32 currentTerm=2;
+    int32 ack=3;
+    bool result=4;
+    int32 replyType=5;
+}
+message request_entry{
+    int32 number=1;
+}
+message reply_entry{
+    bool result=1;
+}
