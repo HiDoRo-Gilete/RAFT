@@ -11,4 +11,4 @@ là click vào node đó trên giao diện
 2. khi 1 node start lại, nó sẽ thêm được các log trước đó bị bỏ lỡ
 3. khi một node mất kết nối, nó không thể thêm mới một entry
 4.  khi node mất kết nối quay lại và quá trình bầu cử diễn ra do hết thời gian time out(khi leader bị ngắt) => node quay lại
-này ko thể trở thành leader vì các entry của nó quá cũ
+này không thể trở thành leader vì các entry của nó quá cũ
