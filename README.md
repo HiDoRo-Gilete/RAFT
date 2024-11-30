@@ -12,3 +12,4 @@ là click vào node đó trên giao diện
 3. khi một node mất kết nối, nó không thể thêm mới một entry
 4.  khi node mất kết nối quay lại và quá trình bầu cử diễn ra do hết thời gian time out(khi leader bị ngắt) => node quay lại
 này không thể trở thành leader vì các entry của nó quá cũ
+5. để tạo phân mảnh gồm hai mạng con=> xóa bỏ các dây nối sao cho tách biệt các nốt thành 2 mạng, lúc này trên mỗi mạng sẽ có 1 leader riêng. mỗi mạng này hoạt động theo cơ chế 1,2,3,4 nhưng đồng bộ với toàn bộ node.
