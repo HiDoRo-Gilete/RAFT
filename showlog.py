@@ -21,8 +21,8 @@ def getAllLog(allNodes):
                     else: entry+=getstring("")+"|"
                 print(entry)
 
-        except:
-            pass
+        except Exception as e:
+            print(e)
 while True:
     try:
         print("To exit, press Ctrl C\n\n")
@@ -30,14 +30,14 @@ while True:
             if fi.read() =="": print("Wait for mininet start!")
             else:
                 fi.seek(0)
-                allNodes = json.load(fi)['ports']
+                allNodes = ["Node "+str(i) for i in range(1,json.load(fi)['num']+1)]
                 top ="|"
                 for item in allNodes:
                     top+=getstring(item)+"|"
                 print(top) 
                 getAllLog(allNodes)
 
-        time.sleep(0.2)
+        time.sleep(2)
         os.system('cls' if os.name == 'nt' else 'clear')
     except:
         break

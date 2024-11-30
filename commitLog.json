@@ -1,8 +1,16 @@
 {
-    "Node 2": [
+    "Node 3": [
         {
             "term": 1,
             "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
         },
         {
             "term": 1,
@@ -16,13 +24,29 @@
         },
         {
             "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
             "number": 17
         }
     ],
-    "Node 3": [
+    "Node 2": [
         {
             "term": 1,
             "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
         },
         {
             "term": 1,
@@ -33,6 +57,50 @@
         {
             "term": 1,
             "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
+            "number": 17
+        }
+    ],
+    "Node 5": [
+        {
+            "term": 1,
+            "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
+            "number": 17
+        }
+    ],
+    "Node 6": [
+        {
+            "term": 1,
+            "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 16
         },
         {
             "term": 1,

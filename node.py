@@ -216,7 +216,7 @@ class NODE(raft_pb2_grpc.RAFT):
                                 self.ackLength[i] = 0
                                 self.replicateLog(i+1)
         except Exception as e:
-            print(e)
+            #print(e)
             print("no reply from port "+port+" for vote request")
     def replicateLog(self,folower):
         prefixLen=self.sentLenght[folower-1]
