@@ -11,10 +11,14 @@ def getAllLog(allNodes):
     with open("commitLog.json") as file:
         try:
             data=json.load(file)
+            print()
+            for item in allNodes:
+                if item not in data:
+                    data[item] =[]
             maxlen=max(len(data[item]) for item in allNodes)
             for i in range(maxlen):
                 entry ="|"
-                for item in data:
+                for item in allNodes:
                     if len(data[item])>i:
                         ite = data[item][i]
                         entry+=getstring("("+str(ite["term"])+","+str(ite["number"])+")") +"|"
@@ -22,7 +26,8 @@ def getAllLog(allNodes):
                 print(entry)
 
         except Exception as e:
-            print(e)
+            pass
+            #print(e)
 while True:
     try:
         print("To exit, press Ctrl C\n\n")

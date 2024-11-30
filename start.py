@@ -91,12 +91,15 @@ while True:
                     if distance(mousex,mousey,x,y) <=20:
                         number = i
             elif START:
+                t = True
                 for i in range(0,number):
                     PI=3.14159
                     degree = 2*PI/number
                     if distance(mousex,mousey,width/2+200+200*math.cos(i*degree+PI/2),
                     height/2-200*math.sin(i*degree+PI/2)) <=20:
                         Mininet.changeStateNode(i)
+                        t=False
+                if t: Mininet.checkHoverLine()
         elif e.type == pygame.MOUSEBUTTONDOWN and e.button ==5: #scroll mouse down
             h_root-=10
         elif e.type == pygame.MOUSEBUTTONDOWN and e.button ==4: #scroll mouse up

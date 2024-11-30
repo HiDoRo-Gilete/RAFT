@@ -1,92 +1,28 @@
 {
-    "Node 3": [
-        {
-            "term": 1,
-            "number": 12
-        },
-        {
-            "term": 1,
-            "number": 14
-        },
-        {
-            "term": 1,
-            "number": 16
-        },
-        {
-            "term": 1,
-            "number": 17
-        }
-    ],
-    "Node 1": [
-        {
-            "term": 1,
-            "number": 12
-        },
-        {
-            "term": 1,
-            "number": 14
-        },
-        {
-            "term": 1,
-            "number": 16
-        },
-        {
-            "term": 1,
-            "number": 17
-        }
-    ],
-    "Node 2": [
-        {
-            "term": 1,
-            "number": 12
-        },
-        {
-            "term": 1,
-            "number": 14
-        },
-        {
-            "term": 1,
-            "number": 16
-        },
-        {
-            "term": 1,
-            "number": 17
-        }
-    ],
     "Node 4": [
         {
-            "term": 1,
+            "term": 2,
             "number": 12
         },
         {
-            "term": 1,
+            "term": 2,
             "number": 14
         },
         {
-            "term": 1,
+            "term": 2,
+            "number": 15
+        },
+        {
+            "term": 2,
             "number": 16
         },
         {
-            "term": 1,
+            "term": 2,
             "number": 17
-        }
-    ],
-    "Node 5": [
-        {
-            "term": 1,
-            "number": 12
         },
         {
-            "term": 1,
-            "number": 14
-        },
-        {
-            "term": 1,
-            "number": 16
-        },
-        {
-            "term": 1,
-            "number": 17
+            "term": 2,
+            "number": 18
         }
     ],
     "Node 6": [
@@ -100,11 +36,149 @@
         },
         {
             "term": 1,
+            "number": 15
+        },
+        {
+            "term": 1,
             "number": 16
         },
         {
             "term": 1,
             "number": 17
+        },
+        {
+            "term": 1,
+            "number": 18
+        }
+    ],
+    "Node 3": [
+        {
+            "term": 2,
+            "number": 12
+        },
+        {
+            "term": 2,
+            "number": 14
+        },
+        {
+            "term": 2,
+            "number": 15
+        },
+        {
+            "term": 2,
+            "number": 16
+        },
+        {
+            "term": 2,
+            "number": 17
+        },
+        {
+            "term": 2,
+            "number": 18
+        }
+    ],
+    "Node 2": [
+        {
+            "term": 2,
+            "number": 12
+        },
+        {
+            "term": 2,
+            "number": 14
+        },
+        {
+            "term": 2,
+            "number": 15
+        },
+        {
+            "term": 2,
+            "number": 16
+        },
+        {
+            "term": 2,
+            "number": 17
+        },
+        {
+            "term": 2,
+            "number": 18
+        }
+    ],
+    "Node 1": [
+        {
+            "term": 1,
+            "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 15
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
+            "number": 17
+        },
+        {
+            "term": 1,
+            "number": 18
+        }
+    ],
+    "Node 7": [
+        {
+            "term": 1,
+            "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 15
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
+            "number": 17
+        },
+        {
+            "term": 1,
+            "number": 18
+        }
+    ],
+    "Node 5": [
+        {
+            "term": 1,
+            "number": 12
+        },
+        {
+            "term": 1,
+            "number": 14
+        },
+        {
+            "term": 1,
+            "number": 15
+        },
+        {
+            "term": 1,
+            "number": 16
+        },
+        {
+            "term": 1,
+            "number": 17
+        },
+        {
+            "term": 1,
+            "number": 18
         }
     ]
 }
