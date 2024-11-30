@@ -28,16 +28,18 @@ class Log:
         self.term = term
         self.mes = mes
 class mininetInfor:
-    def __init__(self,fileconfig):
+    def __init__(self,fileconfig,id):
         with open(fileconfig,'r') as file:
             data =json.load(file)
         self.num=int(data['num'])
-        self.ports = data['ports']
+        self.send_ports =[]
+        for i in range(1,self.num+1): 
+            self.send_ports.append("localhost:50"+str(id)+str(i))
         self.fileconfig = fileconfig
-    def updateCurrentLeader(self,port):
+    def updateCurrentLeader(self,leaderInfo):
         with open(self.fileconfig, 'r+') as file:
             file_data = json.load(file)
-            file_data['leader_addr']=port
+            file_data['leader_information']=leaderInfo
             file.seek(0)
             json.dump(file_data, file, indent=4)
             file.truncate()
@@ -58,13 +60,13 @@ class mininetInfor:
 class NODE(raft_pb2_grpc.RAFT):
     def __init__(self,port,id,pos,file):
         #backend
-        self.mininet = mininetInfor(file)
+        self.mininet = mininetInfor(file,id)
         self.timeout=0
         self.comitLength=0
         self.getTimeout()
         self.currentTerm =0
         self.thread = None
-        self.port = port
+        self.ports = port
         self.role ="Folower"
         self.voteFor=None
         self.currentLeader=None
@@ -77,7 +79,7 @@ class NODE(raft_pb2_grpc.RAFT):
         self.routine=360
         self.allthreads =[]
         #frontend
-        self.isstop = False
+        self.isstop = [False for i in range(self.mininet.num)]
         self.thr_runserver()
         self.status= RESUME
         self.pos = pos
@@ -87,17 +89,19 @@ class NODE(raft_pb2_grpc.RAFT):
         self.sentLenght=[0 for i in range(self.mininet.num)]
         self.ackLength=[0 for i in range(self.mininet.num)]
     def thr_runserver(self):
-        thr= Thread(target=self.runserver,args=())
-        thr.start()
-        self.allthreads.append(thr)
-    def runserver(self):
-        server=grpc.server(futures.ThreadPoolExecutor(max_workers=5))
+        for i in range(self.mininet.num):
+            thr= Thread(target=self.runserver,args=(self.ports[i],i,))
+            thr.start()
+            self.allthreads.append(thr)
+    def runserver(self,port,index):
+        server=grpc.server(futures.ThreadPoolExecutor(max_workers=2))
         raft_pb2_grpc.add_RAFTServicer_to_server(self,server)
-        print("Node "+str(self.id)+" at "+self.port)
-        server.add_insecure_port(self.port)
+        #print("Node "+str(self.id)+" at "+self.port)
+        server.add_insecure_port(port)
         server.start()
-        while not self.isstop:
-            time.sleep(0.05)
+        while not self.isstop[index]:
+            time.sleep(0.1)
+        server.stop(None)
 
     def initTimedrawline(self):
         self.timedrawline=[0 for i in range(self.mininet.num)]
@@ -150,8 +154,8 @@ class NODE(raft_pb2_grpc.RAFT):
         if leaderCommit >self.comitLength:
             for i in range(self.comitLength,leaderCommit):
                 print("Node "+str(self.id)+" commit entry (term: "+str(self.log[i].term)+" mes "+str(self.log[i].mes)+")")
-            
             self.comitLength=leaderCommit
+            self.mininet.updateCommitLog("Node "+str(self.id),self.log[0:leaderCommit])
     def AddEntry(self, request, context): #service 3
         self.log.append(Log(self.currentTerm,request.number))
         return raft_pb2.reply_entry(result=True)
@@ -160,13 +164,13 @@ class NODE(raft_pb2_grpc.RAFT):
         fps=60
         self.timeout=min(self.timeout+random.randint(6*fps,10*fps),15*fps-random.randint(0,2*fps))
     def start(self):
-        self.isstop=False
+        self.isstop=[False for i in range(self.mininet.num)]
         self.status=RESUME
         self.timeout=0
         if self.role!= "Leader": self.getTimeout()
         self.thr_runserver()
     def stop(self):
-        self.isstop = True
+        self.isstop = [True for i in range(self.mininet.num)]
         self.status=PAUSE
         print("Node "+str(self.id)+" has been stopped!")
     def drawline(self):
@@ -186,7 +190,7 @@ class NODE(raft_pb2_grpc.RAFT):
         if len(self.log) >0: self.lastTerm = self.log[len(self.log)-1].term
         for i in range(self.mininet.num):
             if i+1 !=self.id:
-                thr = Thread(target=self.sendRequestVote,args=(self.mininet.ports[i],))
+                thr = Thread(target=self.sendRequestVote,args=(self.mininet.send_ports[i],))
                 thr.start()
                 self.allthreads.append(thr)
     def sendRequestVote(self,port):
@@ -202,7 +206,9 @@ class NODE(raft_pb2_grpc.RAFT):
                     if len(self.voteReceive) >= (self.mininet.num+1)/2:
                         self.role="Leader"
                         self.currentLeader=self.id
-                        self.mininet.updateCurrentLeader(self.port)
+                        leaderInfo={}
+                        leaderInfo['id'],leaderInfo['address']=self.id,'localhost:50'+str(self.id)*2
+                        self.mininet.updateCurrentLeader(leaderInfo)
                         self.timeout=0
                         for i in range(self.mininet.num):
                             if i+1 != self.id:
@@ -210,7 +216,7 @@ class NODE(raft_pb2_grpc.RAFT):
                                 self.ackLength[i] = 0
                                 self.replicateLog(i+1)
         except Exception as e:
-            #print(e)
+            print(e)
             print("no reply from port "+port+" for vote request")
     def replicateLog(self,folower):
         prefixLen=self.sentLenght[folower-1]
@@ -219,7 +225,7 @@ class NODE(raft_pb2_grpc.RAFT):
             suffix.append(self.log[i])
         prefixTerm=0
         if prefixLen>0: prefixTerm = self.log[prefixLen-1].term
-        thr = Thread(target=self.sendReplicateLog,args=(self.mininet.ports[folower-1],prefixLen,prefixTerm,suffix,))
+        thr = Thread(target=self.sendReplicateLog,args=(self.mininet.send_ports[folower-1],prefixLen,prefixTerm,suffix,))
         thr.start()
         self.allthreads.append(thr)
     def sendReplicateLog(self,port,preLen,preTerm,suff):
@@ -261,22 +267,24 @@ class NODE(raft_pb2_grpc.RAFT):
                 if acklen>self.comitLength:
                     acks +=1
             if acks>=(self.mininet.num)//2:
+                print("check")
                 self.comitLength+=1
                 print("Node "+str(self.id)+" (Leader) is commit entry (term: "+str(self.log[self.comitLength-1].term)
                       +" mes: "+str(self.log[self.comitLength-1].mes)+")")
-                self.mininet.updateCommitLog(self.port,self.log)
+                self.mininet.updateCommitLog("Node "+str(self.id),self.log)
             else:
                 break
     def waitForKillAllThread(self):
         while(len(self.allthreads)!=0):
             for thr in self.allthreads:
                 if not thr.is_alive():
+                    
                     self.allthreads.remove(thr)
     def display(self,screen):
         fps=60
         color = GREEN
         self.CommitLogEntries()
-        self.mininet.updateCommitLog(self.port,self.log)
+
         if self.status != PAUSE:
             if self.timeout!=0: self.timeout-=1
             elif self.role !="Leader":  self.requestVote()

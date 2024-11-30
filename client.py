@@ -12,25 +12,25 @@ while num != -1:
     except:
         logOk=False
     if num!=-1 and logOk:
-        portleader=None
+        addr=None
         with open('mininet.json','r') as file:
             if file.read() != "":
                 file.seek(0)
                 data= json.load(file)
-                if data != None and 'leader_addr' in data:
-                    portleader=data['leader_addr']
-            while portleader == None:
+                if data != None and 'leader_information' in data:
+                    addr=data['leader_information']['address']
+            while addr == None:
                 print("Wait for leader!(press ctrl C to exit!)")
                 if file.read() != "":
                     file.seek(0)
                     data= json.load(file)
-                    if data != None and 'leader_addr' in data:
-                        portleader=data['leader_addr']
+                    if data != None and 'leader_information' in data:
+                        addr=data['leader_information']['address']
                 time.sleep(1)
         try:
-             with grpc.insecure_channel(portleader) as channel:
+             with grpc.insecure_channel(addr) as channel:
                 stub = raft_pb2_grpc.RAFTStub(channel)
-                print("Connect to leader running at ",portleader)
+                print("Connect to leader running at ",addr)
                 response = stub.AddEntry(raft_pb2.request_entry(number=num))
                 print("message is sent and wait for commit")
         except Exception as e:
