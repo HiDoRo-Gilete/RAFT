@@ -1,0 +1,12 @@
+{
+    "Log Commit": [
+        {
+            "term": 3,
+            "number": 12
+        },
+        {
+            "term": 12,
+            "number": 13
+        }
+    ]
+}

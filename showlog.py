@@ -8,26 +8,25 @@ def getstring(str):
     left = " " * (vailible-capacityright)
     return left+str+right 
 def getAllLog(allNodes):
-    with open("commitLog.json") as file:
-        try:
-            data=json.load(file)
-            print()
-            for item in allNodes:
-                if item not in data:
-                    data[item] =[]
-            maxlen=max(len(data[item]) for item in allNodes)
-            for i in range(maxlen):
+        arr2d = []
+        for node in allNodes:
+            try:
+                f= open("./commitLog/"+node+".json",'r')
+                data=json.load(f)['Log Commit']
+                arr2d.append(data)
+            except Exception as e:
+                #print(e)
+                arr2d.append([])
+        maxlen = max(len(item) for item in arr2d)
+        for i in range(maxlen):
                 entry ="|"
-                for item in allNodes:
-                    if len(data[item])>i:
-                        ite = data[item][i]
+                for j in range(len(allNodes)):
+                    if len(arr2d[j])>i:
+                        ite = arr2d[j][i]
                         entry+=getstring("("+str(ite["term"])+","+str(ite["number"])+")") +"|"
                     else: entry+=getstring("")+"|"
                 print(entry)
 
-        except Exception as e:
-            pass
-            #print(e)
 while True:
     try:
         print("To exit, press Ctrl C\n\n")

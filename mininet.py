@@ -1,4 +1,4 @@
-import sys
+import sys,os
 sys.path.insert(0,"./RAFT")
 import node
 import math,json
@@ -28,8 +28,8 @@ class MININET():
         self.disconnect=[]
         self.Nodes=[]
         self.createNode()
-        with open('commitLog.json','w') as file:
-            file.write("")
+        arr=os.listdir('./commitLog')
+        for f in arr: os.remove('./commitLog/'+f)
         
     
     def createNode(self):

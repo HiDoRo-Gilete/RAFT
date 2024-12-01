@@ -45,18 +45,16 @@ class mininetInfor:
             json.dump(file_data, file, indent=4)
             file.truncate()
     def updateCommitLog(self,description,logmessage):
-         with open('commitLog.json', 'r+') as file:
+        try:
+            file = open('./commitLog/'+description+".json","w")
             file_data={}
-            if file.read()!="":
-                file.seek(0)
-                file_data = json.load(file)
             entry =[]
             for log in logmessage:
                 entry.append({"term":log.term,"number":log.mes})
-            file_data[description] = entry
-            file.seek(0)
+            file_data['Log Commit'] = entry
             json.dump(file_data, file, indent=4)
-            file.truncate()
+        except Exception as e:
+            print('-----',e,'------')
 
 class NODE(raft_pb2_grpc.RAFT):
     def __init__(self,port,id,pos,file):
@@ -215,7 +213,7 @@ class NODE(raft_pb2_grpc.RAFT):
                                 nod['ack'] = 0
                                 self.replicateLog(node)
         except Exception as e:
-            print(e)
+            #print(e)
             print("no reply from port "+port+" for vote request")
     def replicateLog(self,folower):
         prefixLen=self.mininet.getID[folower]['sentLength']
@@ -256,7 +254,7 @@ class NODE(raft_pb2_grpc.RAFT):
                 self.voteFor = None
                 self.getTimeout()
         except Exception as e:
-            print(e)
+            #print(e)
             print("no reply from port "+port+" for replicate request")
             #cancel election timer
     def CommitLogEntries(self):
