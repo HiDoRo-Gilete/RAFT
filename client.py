@@ -2,8 +2,23 @@ import grpc,sys,random,json,time
 sys.path.insert(0,"./RAFT")
 import raft_pb2
 import raft_pb2_grpc
-
+from threading import Thread
 num =0
+def sendLog(add):
+    try:
+        with grpc.insecure_channel(add) as channel:
+            stub = raft_pb2_grpc.RAFTStub(channel)
+            response = stub.AddEntry(raft_pb2.request_entry(number=num))
+            print('.')
+            time.sleep(0.2)
+            print('.')
+            time.sleep(0.2)
+            print('.')
+            print("Connect to leader running at ",add)
+            print("message is sent and wait for commit")
+    except Exception as e:
+        #print('Leader at '+add+" is down!")
+        pass
 while num != -1:
     logOk=False
     try:
@@ -29,12 +44,10 @@ while num != -1:
                         for item in data['leader_information']:
                             addr.append(item['address'])
                 time.sleep(2)
-        try:
-             for add in addr:
-                with grpc.insecure_channel(add) as channel:
-                    stub = raft_pb2_grpc.RAFTStub(channel)
-                    print("Connect to leader running at ",addr)
-                    response = stub.AddEntry(raft_pb2.request_entry(number=num))
-                    print("message is sent and wait for commit")
-        except Exception as e:
-            print(e)
+        for add in addr:
+            thr = Thread(target=sendLog,args=(add,))
+            thr.start()
+            time.sleep(0.5)
+            
+
+            
